@@ -4,7 +4,7 @@
   "description": "Flash card practice tests for certification preparation",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -22,7 +22,11 @@
   },
   "homepage": "https://github.com/rudenate3/flashyCertServer#readme",
   "dependencies": {
+    "chalk": "^2.4.1",
     "express": "^4.16.3",
     "mongoose": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.5"
   }
 }
