@@ -1,0 +1,24 @@
+{
+  "name": "flashycertsserver",
+  "version": "1.0.0",
+  "description": "Flash card practice tests for certification preparation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rudenate3/flashyCertServer.git"
+  },
+  "keywords": [
+    "practice",
+    "tests",
+    "certs"
+  ],
+  "author": "rudenate3",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rudenate3/flashyCertServer/issues"
+  },
+  "homepage": "https://github.com/rudenate3/flashyCertServer#readme"
+}
