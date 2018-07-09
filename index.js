@@ -5,11 +5,12 @@ const config = {
 
 // Vendor imports
 const chalk = require('chalk'),
-      express = require('express'),
-      mongoose = require('mongoose'),
-      app = express()
+  express = require('express'),
+  mongoose = require('mongoose'),
+  app = express()
 
-app.use(express.json())
+// Import Routes
+const routes = require('./routes')
 
 // Mongoose Setup
 mongoose.connect('mongodb://localhost:27017/flashyCerts')
@@ -17,9 +18,15 @@ mongoose.connection.on('error', () => {
   throw new Error('Unable to connect to Mongo')
 })
 
+// app Setup
+app.use(express.json())
+app.use('/exams', routes)
+
 // Start server
 app.listen(config.port, () => {
   let dateTime = new Date()
-  dateTime = dateTime.getHours() + ':' + dateTime.getMinutes() + ':' + dateTime.getSeconds()
-  console.log(chalk.blue(`Server started @ ${dateTime} on port: ${config.port}`))
+  dateTime = `${dateTime.getHours()}:${dateTime.getMinutes()}:${dateTime.getSeconds()}`
+  console.log(
+    chalk.blue(`Server started @ ${dateTime} on port: ${config.port}`)
+  )
 })
