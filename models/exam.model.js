@@ -52,7 +52,7 @@ const ExamSchema = new Schema({
 const Exam = (module.exports = mongoose.model('Exam', ExamSchema))
 
 module.exports.getExams = callback => {
-  Exam.find({}, 'title', callback) // TODO verify this
+  Exam.find({}, 'title', callback)
 }
 
 module.exports.getExam = (id, callback) => {
