@@ -52,9 +52,10 @@ const ExamSchema = new Schema({
 const Exam = (module.exports = mongoose.model('Exam', ExamSchema))
 
 module.exports.getExams = callback => {
-  Exam.find({}, 'title', callback)
+  Exam.find({}, 'title', callback) // Only fetching title for exams to avoid sending every exam question
 }
 
+// For getting the full exam
 module.exports.getExam = (id, callback) => {
   Exam.findById(id, callback)
 }
