@@ -1,5 +1,6 @@
-const mongoose = require('mongoose'),
-  Schema = mongoose.require.Schema
+const bcrypt = require('bcryptjs'),
+  mongoose = require('mongoose'),
+  Schema = mongoose.Schema
 
 const UserSchema = new Schema({
   username: {
@@ -28,4 +29,23 @@ const UserSchema = new Schema({
   }
 })
 
-module.exports = User = mongoose.model('users', UserSchema)
+const User = (module.exports = mongoose.model('users', UserSchema))
+
+module.exports.createUser = (body, callback) => {
+  const newUser = new User({
+    username: body.username,
+    email: body.email,
+    password: body.password
+  })
+
+  bcrypt.genSalt(
+    (10,
+    (err, salt) => {
+      bcrypt.hash(newUser.password, salt, (err, hash) => {
+        if (err) throw err
+        newUser.password = hash
+        newUser.save(callback)
+      })
+    })
+  )
+}

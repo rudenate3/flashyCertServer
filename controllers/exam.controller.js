@@ -16,6 +16,7 @@ exports.show = function(req, res, next) {
 }
 
 exports.create = function(req, res, next) {
+  //TODO validate req.body
   Exam.createExam(req.body, err => {
     if (err) {
       res.send(err)
@@ -30,6 +31,7 @@ exports.create = function(req, res, next) {
 
 exports.update = function(req, res, next) {
   Exam.updateExam(req.params.id, req.body, err => {
+    //TODO validate req.body
     if (err) res.send(err)
     res.json({
       success: true,

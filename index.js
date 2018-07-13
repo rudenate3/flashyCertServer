@@ -20,7 +20,7 @@ mongoose.connection.on('error', () => {
 
 // app Setup
 app.use(express.json())
-app.use('/exams', routes)
+app.use('/', routes)
 
 // Start server
 app.listen(config.port, () => {
