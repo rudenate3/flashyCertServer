@@ -41,11 +41,24 @@ module.exports.createUser = (body, callback) => {
   bcrypt.genSalt(
     (10,
     (err, salt) => {
+      if (err) return  callback(err)
       bcrypt.hash(newUser.password, salt, (err, hash) => {
-        if (err) throw err
+        if (err) return callback(err)
         newUser.password = hash
         newUser.save(callback)
       })
     })
   )
+}
+
+module.exports.validateUser = (body, callback) => {
+  const { email, password } = body
+  User.findOne({ email }).then(user => {
+    if (!user) return callback({ error: 'User not found' })
+
+    bcrypt.compare(password, user.password).then(match => {
+      if (!match) return callback({ error: 'Incorrect password' })
+      return callback(null, user)
+    })
+  })
 }

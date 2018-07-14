@@ -14,7 +14,18 @@ exports.register = (req, res, next) => {
   })
 }
 
-exports.login = (req, res, next) => {}
+exports.login = (req, res, next) => {
+  User.validateUser(req.body, (err, user) => {
+    if (err) {
+      res.send(err)
+    } else {
+      res.json({
+        success: true,
+        message: 'User Validated'
+      })
+    }
+  })
+}
 
 exports.changePassword = (req, res, next) => {}
 
