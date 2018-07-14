@@ -9,6 +9,7 @@ if (dev) {
 const chalk = require('chalk'),
   express = require('express'),
   mongoose = require('mongoose'),
+  passport = require('passport'),
   app = express()
 
 // Import Routes
@@ -22,6 +23,7 @@ mongoose.connection.on('error', () => {
 
 // app Setup
 app.use(express.json())
+require('./config/passport')(passport)
 app.use('/', routes)
 
 // Start server
