@@ -26,6 +26,7 @@ const QuestionSchema = new Schema({
       correct: {
         // Whether this is a correct answer - allows for t/f, single/multi-choice answers
         type: Boolean,
+        required: true,
         default: false
       }
     }
