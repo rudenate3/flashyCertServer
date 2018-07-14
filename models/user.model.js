@@ -17,6 +17,11 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
+  history: {
+    type: Object,
+    required: true,
+    default: {}
+  },
   createdAt: {
     type: Date,
     required: true,
@@ -41,7 +46,7 @@ module.exports.createUser = (body, callback) => {
   bcrypt.genSalt(
     (10,
     (err, salt) => {
-      if (err) return  callback(err)
+      if (err) return callback(err)
       bcrypt.hash(newUser.password, salt, (err, hash) => {
         if (err) return callback(err)
         newUser.password = hash
