@@ -1,6 +1,8 @@
-// Express config
-const config = {
-  port: 3000
+// Load Environment Variables
+let dev = process.env.NODE_ENV !== 'production'
+
+if (dev) {
+  require('dotenv').load()
 }
 
 // Vendor imports
@@ -13,7 +15,7 @@ const chalk = require('chalk'),
 const routes = require('./routes')
 
 // Mongoose Setup
-mongoose.connect('mongodb://localhost:27017/flashyCerts')
+mongoose.connect(process.env.mongoUri)
 mongoose.connection.on('error', () => {
   throw new Error('Unable to connect to Mongo')
 })
@@ -23,10 +25,10 @@ app.use(express.json())
 app.use('/', routes)
 
 // Start server
-app.listen(config.port, () => {
+app.listen(process.env.port, () => {
   let dateTime = new Date()
   dateTime = `${dateTime.getHours()}:${dateTime.getMinutes()}:${dateTime.getSeconds()}`
   console.log(
-    chalk.blue(`Server started @ ${dateTime} on port: ${config.port}`)
+    chalk.blue(`Server started @ ${dateTime} on port: ${process.env.port}`)
   )
 })
