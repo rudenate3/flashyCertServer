@@ -1,4 +1,5 @@
 const Question = require('../models/question.model')
+const ExamController = require('./exam.controller')
 
 exports.index = (req, res, next) => {
   Question.getQuestions((err, questions) => {
@@ -18,10 +19,12 @@ exports.show = function(req, res, next) {
 exports.create = function(req, res, next) {
   //TODO validate req.body
   req.body._owner = req.user._id
-  Question.createQuestion(req.body, err => {
+  exam = req.body.exam
+  Question.createQuestion(req.body, (err, question) => {
     if (err) {
       res.send(err)
     } else {
+      ExamController.addQuestion({ exam: exam, id: question._id })
       res.json({
         success: true,
         message: 'Question Created'

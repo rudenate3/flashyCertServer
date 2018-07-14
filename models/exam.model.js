@@ -57,3 +57,11 @@ module.exports.updateExam = (id, exam, callback) => {
 module.exports.deleteExam = (id, callback) => {
   Exam.findByIdAndRemove(id, callback)
 }
+
+module.exports.pushQuestion = (id, question, callback) => {
+  Exam.findByIdAndUpdate(
+    { _id: id },
+    { $push: { questions: question } },
+    callback
+  )
+}

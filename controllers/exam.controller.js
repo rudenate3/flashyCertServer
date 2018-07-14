@@ -57,3 +57,10 @@ exports.destroy = function(req, res, next) {
     })
   })
 }
+
+exports.addQuestion = question => {
+  Exam.pushQuestion(question.exam, question.id, (err, question) => {
+    if (err) return err
+    return
+  })
+}
