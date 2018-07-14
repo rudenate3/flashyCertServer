@@ -4,35 +4,16 @@ const mongoose = require('mongoose'),
   Schema = mongoose.Schema
 
 const ExamSchema = new Schema({
+  _owner: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
   title: {
     type: String, // Title of the Exam
     required: true
   },
-  questions: [
-    {
-      // Possible Questions for this exam
-      question: {
-        // Question being asked
-        type: String,
-        required: true
-      },
-      answers: [
-        {
-          // Possible Answers
-          answer: {
-            // Answer text
-            type: String,
-            required: true
-          },
-          correct: {
-            // Whether this is a correct answer - allows for t/f, single/multi-choice answers
-            type: Boolean,
-            default: false
-          }
-        }
-      ]
-    }
-  ],
+  questions: [{ type: Schema.Types.ObjectId, ref: 'Question' }],
   passing: {
     type: Number,
     required: true
@@ -52,7 +33,7 @@ const ExamSchema = new Schema({
 const Exam = (module.exports = mongoose.model('Exam', ExamSchema))
 
 module.exports.getExams = callback => {
-  Exam.find({}, 'title', callback) // Only fetching title for exams to avoid sending every exam question
+  Exam.find({}, ['_owner', 'title'], callback)
 }
 
 // For getting the full exam
