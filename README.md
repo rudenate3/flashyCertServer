@@ -5,7 +5,10 @@ Flashy Certs is an application for building and taking practice tests for certif
 
 * Clone repo
 * Run `npm install` in local folder
-* Create `.env` file in root with `port=xxxx` and `mongoUri=uriToMongoInstance`
+* Create `.env` file in root with 
+  * `port=xxxx` 
+  * `mongoUri=uriToMongoInstance`
+  * `jwtKey='yourKey'`
 
 ### Prerequisites
 
