@@ -38,7 +38,9 @@ module.exports.getExams = callback => {
 
 // For getting the full exam
 module.exports.getExam = (id, callback) => {
-  Exam.findById(id, callback)
+  Exam.find({ _id: id })
+    .populate('questions')
+    .exec(callback)
 }
 
 module.exports.createExam = (body, callback) => {
