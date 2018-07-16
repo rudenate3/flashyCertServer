@@ -4,15 +4,29 @@ const User = require('../models/user.model')
 
 exports.register = (req, res, next) => {
   // TODO validate req.body
-  User.createUser(req.body, err => {
-    if (err) {
-      res.send(err)
-    } else {
-      res.json({
-        success: true,
-        message: 'User Created'
+  User.unique('email', req.body.email, unique => {
+    if (!unique)
+      return res.json({
+        success: false,
+        message: 'Email Taken'
       })
-    }
+    User.unique('username', req.body.username, unique => {
+      if (!unique)
+        return res.json({
+          success: false,
+          message: 'Username Taken'
+        })
+      User.createUser(req.body, err => {
+        if (err) {
+          res.send(err)
+        } else {
+          res.json({
+            success: true,
+            message: 'User Created'
+          })
+        }
+      })
+    })
   })
 }
 
