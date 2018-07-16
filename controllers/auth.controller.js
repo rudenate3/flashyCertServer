@@ -17,7 +17,7 @@ exports.register = (req, res, next) => {
 }
 
 exports.login = (req, res, next) => {
-  User.validateUser(req.body, (err, user) => {
+  User.authenticateUser(req.body, (err, user) => {
     if (err) {
       res.send(err)
     } else {

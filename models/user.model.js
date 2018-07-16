@@ -56,7 +56,7 @@ module.exports.createUser = (body, callback) => {
   )
 }
 
-module.exports.validateUser = (body, callback) => {
+module.exports.authenticateUser = (body, callback) => {
   const { email, password } = body
   User.findOne({ email }).then(user => {
     if (!user) return callback({ error: 'User not found' })
