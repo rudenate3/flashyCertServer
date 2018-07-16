@@ -5,7 +5,7 @@ curl "http://localhost:3000/register" \
   --request POST \
   --header "Content-Type: application/json" \
   --data '{
-      "username":"'"${USERNAME}"'",
+      "username":"'"${HANDLE}"'",
       "email": "'"${EMAIL}"'",
       "password": "'"${PASSWORD}"'"
   }'
