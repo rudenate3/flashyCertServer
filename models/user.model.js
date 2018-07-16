@@ -67,3 +67,12 @@ module.exports.authenticateUser = (body, callback) => {
     })
   })
 }
+
+module.exports.unique = (key, value, callback) => {
+  const query = {}
+  query[key] = value
+  User.findOne(query).then(taken => {
+    if (taken) return callback(false)
+    return callback(true)
+  })
+}
