@@ -18,9 +18,7 @@ const UserSchema = new Schema({
     required: true
   },
   history: {
-    type: Object,
-    required: true,
-    default: {}
+    type: Object
   },
   createdAt: {
     type: Date,
