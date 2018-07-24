@@ -35,28 +35,32 @@ const QuestionSchema = new Schema({
 
 const Question = (module.exports = mongoose.model('Question', QuestionSchema))
 
-module.exports.getQuestions = callback => {
-  Question.find(callback)
-}
-
 // For getting the full question
-module.exports.getQuestion = (id, callback) => {
-  Question.findById(id, callback)
+module.exports.getQuestion = id => {
+  if (!isObjectId(id)) return Promise.resolve(null)
+  return Question.findById(id)
 }
 
-module.exports.createQuestion = (body, callback) => {
-  const newQuestion = new Question(body)
-  newQuestion.save(callback)
+module.exports.createQuestion = body => {
+  return new Question(body).save()
 }
 
-module.exports.updateQuestion = (id, question, callback) => {
+module.exports.updateQuestion = (id, question) => {
+  if (!isObjectId(id)) return Promise.resolve(null)
   const updatedQuestion = {
     ...question,
     updatedAt: new Date()
   }
-  Question.findByIdAndUpdate(id, updatedQuestion, callback)
+  return Question.findByIdAndUpdate(id, updatedQuestion)
 }
 
-module.exports.deleteQuestion = (id, callback) => {
-  Question.findByIdAndRemove(id, callback)
+module.exports.deleteQuestion = id => {
+  if (!isObjectId(id)) return Promise.resolve(null)
+  return Question.findByIdAndRemove(id)
 }
+
+module.exports.isOwner = (examId, userId) => {
+  return Exam.find({ _id: examId, _owner: userId })
+}
+
+const isObjectId = id => mongoose.Types.ObjectId.isValid(id)
