@@ -55,14 +55,13 @@ module.exports.createUser = body => {
     .catch(Promise.resolve(null))
 }
 
-module.exports.authenticateUser = (body, callback) => {
+module.exports.authenticateUser = body => {
   const { email, password } = body
-  User.findOne({ email }).then(user => {
-    if (!user) return callback({ error: 'User not found' })
-
-    bcrypt.compare(password, user.password).then(match => {
-      if (!match) return callback({ error: 'Incorrect password' })
-      return callback(null, user)
+  return User.findOne({ email }).then(user => {
+    if (!user) return Promise.resolve(null)
+    return bcrypt.compare(password, user.password).then(match => {
+      if (!match) return Promise.resolve(null)
+      return Promise.resolve(user)
     })
   })
 }

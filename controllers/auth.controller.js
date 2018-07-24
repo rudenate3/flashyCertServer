@@ -19,20 +19,18 @@ exports.register = (req, res) => {
     .catch(err => res.send(err))
 }
 
-exports.login = (req, res, next) => {
-  User.authenticateUser(req.body, (err, user) => {
-    if (err) {
-      res.send(err)
-    } else {
+exports.login = (req, res) => {
+  User.authenticateUser(req.body)
+    .then(user => {
+      if (!user) return res.sendStatus(404)
       const payload = {
         id: user.id,
         username: user.username
       }
-
       jwt.sign(
         payload,
         process.env.jwtKey,
-        { expiresIn: 3600 },
+        { expiresIn: 7200 },
         (err, token) => {
           if (err) res.send(err)
           res.json({
@@ -41,8 +39,8 @@ exports.login = (req, res, next) => {
           })
         }
       )
-    }
-  })
+    })
+    .catch(err => res.send(err))
 }
 
 exports.changePassword = (req, res, next) => {}
