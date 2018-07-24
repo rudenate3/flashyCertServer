@@ -1,66 +1,47 @@
 const Exam = require('../models/exam.model')
 
-exports.index = (req, res, next) => {
-  Exam.getExams((err, exams) => {
-    if (err) return next(err)
-    res.json(exams)
-  })
+exports.index = (req, res) => {
+  Exam.getExams()
+    .then(exams => res.json(exams))
+    .catch(err => res.send(err))
 }
 
-exports.show = function(req, res, next) {
-  Exam.getExam(req.params.id, (err, exam) => {
-    if (err) return next(err)
-    if (!exam) return res.sendStatus(404)
-    res.json(exam)
-  })
+exports.show = (req, res) => {
+  Exam.getExam(req.params.id)
+    .then(exam => {
+      if (!exam) return res.sendStatus(401)
+      return res.json(exam)
+    })
+    .catch(err => res.send(err))
 }
 
-exports.create = function(req, res, next) {
+exports.create = (req, res) => {
   //TODO validate req.body
   req.body._owner = req.user._id
-  Exam.createExam(req.body, err => {
-    if (err) {
-      res.send(err)
-    } else {
-      res.json({
-        success: true,
-        message: 'Exam Created'
-      })
-    }
+  Exam.createExam(req.body)
+    .then(() => res.sendStatus(201))
+    .catch(err => res.send(err))
+}
+
+exports.update = (req, res) => {
+  //TODO validate req.body
+  Exam.isOwner(req.params.id, req.user._id).then(owner => {
+    if (!owner.length) return res.sendStatus(401)
+    Exam.updateExam(req.params.id, req.body)
+      .then(() => res.sendStatus(204))
+      .catch(err => res.send(err))
   })
 }
 
-exports.update = function(req, res, next) {
-  Exam.getExam(req.params.id, (err, exam) => {
-    if (err) return next(err)
-    if (!exam) return res.sendStatus(404)
-    if (exam._owner !== req.user._id) return res.sendStatus(401)
-    Exam.updateExam(req.params.id, req.body, err => {
-      //TODO validate req.body
-      if (err) res.send(err)
-      res.json({
-        success: true,
-        message: 'Exam Updated'
-      })
-    })
-  })
-}
-
-exports.destroy = function(req, res, next) {
-  Exam.getExam(req.params.id, (err, exam) => {
-    if (err) return next(err)
-    if (!exam) return res.sendStatus(404)
-    if (exam._owner !== req.user._id) return res.sendStatus(401)
-    Exam.deleteExam(req.params.id, err => {
-      if (err) return res.send(500, err)
-      return res.sendStatus(204)
-    })
+exports.destroy = (req, res) => {
+  Exam.isOwner(req.params.id, req.user._id).then(owner => {
+    if (!owner.length) return res.sendStatus(401)
+    Exam.deleteExam(req.params.id)
+      .then(() => res.sendStatus(204))
+      .catch(err => res.send(err))
   })
 }
 
 exports.addQuestion = question => {
-  Exam.pushQuestion(question.exam, question.id, (err, question) => {
-    if (err) return err
-    return
-  })
+  Exam.pushQuestion(question.exam, question.id).catch(err => res.send(err))
 }

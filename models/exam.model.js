@@ -32,38 +32,35 @@ const ExamSchema = new Schema({
 
 const Exam = (module.exports = mongoose.model('Exam', ExamSchema))
 
-module.exports.getExams = callback => {
-  Exam.find({}, ['_owner', 'title'], callback)
+module.exports.getExams = () => {
+  return Exam.find({}, ['_owner', 'title'])
 }
 
 // For getting the full exam
-module.exports.getExam = (id, callback) => {
-  Exam.find({ _id: id })
-    .populate('questions')
-    .exec(callback)
+module.exports.getExam = id => {
+  return Exam.find({ _id: id }).populate('questions')
 }
 
-module.exports.createExam = (body, callback) => {
-  const newExam = new Exam(body)
-  newExam.save(callback)
+module.exports.createExam = body => {
+  return new Exam(body).save()
 }
 
-module.exports.updateExam = (id, exam, callback) => {
+module.exports.updateExam = (id, exam) => {
   const updatedExam = {
     ...exam,
     updatedAt: new Date()
   }
-  Exam.findByIdAndUpdate(id, updatedExam, callback)
+  return Exam.findByIdAndUpdate(id, updatedExam)
 }
 
-module.exports.deleteExam = (id, callback) => {
-  Exam.findByIdAndRemove(id, callback)
+module.exports.deleteExam = id => {
+  return Exam.findByIdAndRemove(id)
 }
 
-module.exports.pushQuestion = (id, question, callback) => {
-  Exam.findByIdAndUpdate(
-    { _id: id },
-    { $push: { questions: question } },
-    callback
-  )
+module.exports.pushQuestion = (id, question) => {
+  return Exam.findByIdAndUpdate({ _id: id }, { $push: { questions: question } })
+}
+
+module.exports.isOwner = (examId, userId) => {
+  return Exam.find({ _id: examId, _owner: userId })
 }
