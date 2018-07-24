@@ -38,6 +38,7 @@ module.exports.getExams = () => {
 
 // For getting the full exam
 module.exports.getExam = id => {
+  if (!isObjectId(id)) return Promise.resolve(null)
   return Exam.find({ _id: id }).populate('questions')
 }
 
@@ -46,6 +47,7 @@ module.exports.createExam = body => {
 }
 
 module.exports.updateExam = (id, exam) => {
+  if (!isObjectId(id)) return Promise.resolve(null)
   const updatedExam = {
     ...exam,
     updatedAt: new Date()
@@ -54,6 +56,7 @@ module.exports.updateExam = (id, exam) => {
 }
 
 module.exports.deleteExam = id => {
+  if (!isObjectId(id)) return Promise.resolve(null)
   return Exam.findByIdAndRemove(id)
 }
 
@@ -64,3 +67,5 @@ module.exports.pushQuestion = (id, question) => {
 module.exports.isOwner = (examId, userId) => {
   return Exam.find({ _id: examId, _owner: userId })
 }
+
+const isObjectId = id => mongoose.Types.ObjectId.isValid(id)
