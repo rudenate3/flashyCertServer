@@ -34,24 +34,25 @@ const UserSchema = new Schema({
 
 const User = (module.exports = mongoose.model('users', UserSchema))
 
-module.exports.createUser = (body, callback) => {
+module.exports.createUser = body => {
   const newUser = new User({
     username: body.username,
     email: body.email,
     password: body.password
   })
 
-  bcrypt.genSalt(
-    (10,
-    (err, salt) => {
-      if (err) return callback(err)
-      bcrypt.hash(newUser.password, salt, (err, hash) => {
-        if (err) return callback(err)
-        newUser.password = hash
-        newUser.save(callback)
-      })
+  return bcrypt
+    .genSalt(10)
+    .then(salt => {
+      bcrypt
+        .hash(newUser.password, salt)
+        .then(hash => {
+          newUser.password = hash
+          return newUser.save()
+        })
+        .catch(Promise.resolve(null))
     })
-  )
+    .catch(Promise.resolve(null))
 }
 
 module.exports.authenticateUser = (body, callback) => {
@@ -66,11 +67,11 @@ module.exports.authenticateUser = (body, callback) => {
   })
 }
 
-module.exports.unique = (key, value, callback) => {
+module.exports.unique = (key, value) => {
   const query = {}
   query[key] = value
-  User.findOne(query).then(taken => {
-    if (taken) return callback(false)
-    return callback(true)
+  return User.findOne(query).then(result => {
+    if (result) return false
+    return true
   })
 }

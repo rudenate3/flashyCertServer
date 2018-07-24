@@ -2,32 +2,21 @@ const jwt = require('jsonwebtoken')
 
 const User = require('../models/user.model')
 
-exports.register = (req, res, next) => {
+exports.register = (req, res) => {
   // TODO validate req.body
-  User.unique('email', req.body.email, unique => {
-    if (!unique)
-      return res.json({
-        success: false,
-        message: 'Email Taken'
-      })
-    User.unique('username', req.body.username, unique => {
-      if (!unique)
-        return res.json({
-          success: false,
-          message: 'Username Taken'
+  User.unique('email', req.body.email)
+    .then(unique => {
+      if (!unique) return res.json({ error: 'Email Taken' })
+      User.unique('username', req.body.username)
+        .then(unique => {
+          if (!unique) return res.json({ error: 'Username Taken' })
+          User.createUser(req.body)
+            .then(() => res.sendStatus(201))
+            .catch(err => res.send(err))
         })
-      User.createUser(req.body, err => {
-        if (err) {
-          res.send(err)
-        } else {
-          res.json({
-            success: true,
-            message: 'User Created'
-          })
-        }
-      })
+        .catch(err => res.send(err))
     })
-  })
+    .catch(err => res.send(err))
 }
 
 exports.login = (req, res, next) => {
