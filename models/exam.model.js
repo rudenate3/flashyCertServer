@@ -38,7 +38,9 @@ module.exports.getExams = () => {
 
 // For getting the full exam
 module.exports.getExam = id => {
-  if (!isObjectId(id)) return Promise.resolve(null)
+  if (!isObjectId(id)) {
+    return Promise.resolve(null)
+  }
   return Exam.find({ _id: id }).populate('questions')
 }
 
@@ -68,4 +70,5 @@ module.exports.isOwner = (examId, userId) => {
   return Exam.find({ _id: examId, _owner: userId })
 }
 
-const isObjectId = id => mongoose.Types.ObjectId.isValid(id)
+const isObjectId = id =>
+  typeof id === String && mongoose.Types.ObjectId.isValid(id)
