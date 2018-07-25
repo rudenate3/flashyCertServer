@@ -4,7 +4,8 @@
   "description": "Flash card practice tests for certification preparation",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -32,6 +33,7 @@
     "passport-jwt": "^4.0.0"
   },
   "devDependencies": {
+    "jest": "^23.4.1",
     "nodemon": "^1.17.5"
   }
 }
