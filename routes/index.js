@@ -23,7 +23,6 @@ module.exports = router
   .patch('/exams/:id', authenticated(), examsController.update)
   .delete('/exams/:id', authenticated(), examsController.destroy)
   // Question Routes
-  .get('/questions/', authenticated(), questionsController.index)
   .get('/questions/:id', authenticated(), questionsController.show)
   .post('/questions/', authenticated(), questionsController.create)
   .patch('/questions/:id', authenticated(), questionsController.update)
