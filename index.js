@@ -7,6 +7,7 @@ if (dev) {
 
 // Vendor imports
 const chalk = require('chalk'),
+  cors = require('cors'),
   express = require('express'),
   mongoose = require('mongoose'),
   passport = require('passport'),
@@ -22,6 +23,7 @@ mongoose.connection.on('error', () => {
 })
 
 // app Setup
+app.use(cors({ origin: process.env.cors }))
 app.use(express.json())
 require('./config/passport')(passport)
 app.use('/', routes)
