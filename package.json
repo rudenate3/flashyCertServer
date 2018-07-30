@@ -1,5 +1,5 @@
 {
-  "name": "flashycertsserver",
+  "name": "flashycertserver",
   "version": "1.0.0",
   "description": "Flash card practice tests for certification preparation",
   "main": "index.js",
