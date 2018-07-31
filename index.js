@@ -3,6 +3,7 @@ let dev = process.env.NODE_ENV !== 'production'
 
 if (dev) {
   require('dotenv').load()
+
 }
 
 // Vendor imports
@@ -21,6 +22,14 @@ mongoose.connect(process.env.mongoUri)
 mongoose.connection.on('error', () => {
   throw new Error('Unable to connect to Mongo')
 })
+if (dev) mongoose.set('debug', (collection, method) => {
+  console.debug(`${collection}.${method}`)
+})
+
+if(dev) {
+  const morgan = require('morgan')
+  app.use(morgan('dev'))
+}
 
 // app Setup
 app.use(cors({ origin: process.env.cors }))
