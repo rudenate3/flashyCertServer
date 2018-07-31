@@ -10,6 +10,7 @@ Flashy Certs is an application for building and taking practice tests for certif
   - `port=xxxx`
   - `mongoUri=uriToMongoInstance`
   - `jwtKey=yourKey`
+  - `cors=yourCORSOrigin`
 
 ### Prerequisites
 
