@@ -6,10 +6,10 @@ exports.register = (req, res) => {
   // TODO validate req.body
   User.unique('email', req.body.email)
     .then(unique => {
-      if (!unique) return res.json({ error: 'Email Taken' })
+      if (!unique) return res.sendStatus(401)
       User.unique('username', req.body.username)
         .then(unique => {
-          if (!unique) return res.json({ error: 'Username Taken' })
+          if (!unique) return res.sendStatus(401)
           User.createUser(req.body)
             .then(() => res.sendStatus(201))
             .catch(err => res.send(err))
