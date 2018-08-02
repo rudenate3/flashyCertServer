@@ -3,21 +3,29 @@ const jwt = require('jsonwebtoken')
 const User = require('../models/user.model')
 
 exports.register = (req, res) => {
-  // TODO validate req.body
+  // TODO validate req.body && do unique validation
   User.unique('email', req.body.email)
     .then(unique => {
       if (!unique) {
-        res.statusMessage = "Email Taken"
-        return res.sendStatus(401)
+        return res.status(401).json({
+          success: false,
+          error: 'Email Taken'
+        })
       }
       User.unique('username', req.body.username)
         .then(unique => {
           if (!unique) {
-            res.statusMessage = "Username Taken"
-            return res.sendStatus(401)
+            return res.status(401).json({
+              success: false,
+              error: 'Username Taken'
+            })
           }
           User.createUser(req.body)
-            .then(() => res.sendStatus(201))
+            .then(() => {
+              return res.status(201).json({
+                success: true
+              })
+            })
             .catch(err => res.send(err))
         })
         .catch(err => res.send(err))
