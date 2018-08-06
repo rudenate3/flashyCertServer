@@ -36,17 +36,21 @@ exports.register = (req, res) => {
 exports.login = (req, res) => {
   User.authenticateUser(req.body)
     .then(user => {
-      if (!user) return res.sendStatus(404)
+      if (!user) return res.status(404).json({
+        success: false,
+        error: 'Invalid Credentials'
+      })
       const payload = {
         id: user.id,
         username: user.username
       }
       jwt.sign(
         payload,
-        process.env.jwtKey,
-        { expiresIn: 7200 },
+        process.env.jwtKey, {
+          expiresIn: 7200
+        },
         (err, token) => {
-          if (err) res.send(err)
+          if (err) return res.status(500).json(err)
           res.json({
             success: true,
             token: `Bearer ${token}`
@@ -54,7 +58,7 @@ exports.login = (req, res) => {
         }
       )
     })
-    .catch(err => res.send(err))
+    .catch(err => res.status(500).json(err))
 }
 
 exports.changePassword = (req, res, next) => {}
